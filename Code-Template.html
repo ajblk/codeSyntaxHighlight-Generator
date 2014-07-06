@@ -1,14 +1,6 @@
-﻿<!-- 
-/**
- * Code Syntax Highlight Generator Template
- * Modified by ajblk
- * Date: 05 July, 2014
- * Learn More at: http://codeworkout.blogspot.com/2014/07/format-the-source-code-syntax.html
-*/ 
--->
-<html>
+﻿<html>
 <head>
-	<link rel="stylesheet" type="text/css" href="stylesheets/css/stylehighlighter01.css" />	
+	<link type="text/css" href="stylesheets/css/stylehighlighter01.css" />	
 	<script src='javascripts/js/sh-min.js' type='text/javascript'></script>
 </head>
 <body>
@@ -16,8 +8,11 @@
 
 <!-- Insert The Generated HTML Above This -->
 <script language='javascript'>
-	var highAllObj = { presourcecode: "presourcecode", highlighterMainDivId: "highlighterMainDiv" };	
-	//dp.SyntaxHighlighter.BloggerMode(); //Activate for Google Bloggers site.
+	var highAllObj = { 
+						presourcecode: "presourcecode", 
+						highlighterMainDivId: "highlighterMainDiv" 
+					};	
+	//dp.SyntaxHighlighter.BloggerMode(); //Uncomment for Google Blogger.
 	dp.SyntaxHighlighter.Initialize(highAllObj);
 </script>
 </body>
