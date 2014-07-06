@@ -24,5 +24,318 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
-var dp={sh:{Toolbar:{},Utils:{},RegexLib:{},Brushes:{},Strings:{AboutDialog:'<html><head><title>About...</title></head><body class="dp-about"><table cellspacing="0"><tr><td class="copy"><p class="title">dp.SyntaxHighlighter</div><div class="para">Version: {V}</p><p><a href="http://www.dreamprojections.com/syntaxhighlighter/?ref=about" target="_blank">http://www.dreamprojections.com/syntaxhighlighter</a></p>&copy;2004-2008 Alex Gorbatchev.</td></tr><tr><td class="footer">To Learn: <a href="http://codeworkout.blogspot.com/2014/07/format-the-source-code-syntax.html" target="_blank">How to Generate Code Syntax Highlight</a><input type="button" class="close" value="OK" onClick="window.close()"/></td></tr></table></body></html>'},ClipboardSwf:null,Version:"1.5.2"}};dp.SyntaxHighlighter=dp.sh;dp.sh.Toolbar.Commands={ExpandSource:{label:"+ expand source",check:function(e){return e.collapse},func:function(e,t){e.parentNode.removeChild(e);t.div.className=t.div.className.replace("collapsed","")}},ViewSource:{label:"view plain",func:function(e,t){var n=dp.sh.Utils.FixForBlogger(t.originalCode).replace(/</g,"&lt;");var r=window.open("","_blank","width=750, height=400, location=0, resizable=1, menubar=0, scrollbars=0");r.document.write('<textarea style="width:99%;height:99%">'+n+"</textarea>");r.document.close()}},CopyToClipboard:{label:"copy to clipboard",check:function(){return window.clipboardData!=null||dp.sh.ClipboardSwf!=null},func:function(e,t){var n=dp.sh.Utils.FixForBlogger(t.originalCode).replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&/g,"&");if(window.clipboardData){window.clipboardData.setData("text",n)}else if(dp.sh.ClipboardSwf!=null){var r=t.flashCopier;if(r===null){r=document.createElement("div");t.flashCopier=r;t.div.appendChild(r)}r.innerHTML='<embed src="'+dp.sh.ClipboardSwf+'" FlashVars="clipboard='+encodeURIComponent(n)+'" width="0" height="0" type="application/x-shockwave-flash"></embed>'}alert("The code is in your clipboard now")}},PrintSource:{label:"print",func:function(e,t){var n=document.createElement("IFRAME");var r=null;n.style.cssText="position:absolute;width:0px;height:0px;left:-500px;top:-500px;";document.body.appendChild(n);r=n.contentWindow.document;dp.sh.Utils.CopyStyles(r,window.document);r.write('<div class="'+t.div.className.replace("collapsed","")+' printing">'+t.div.innerHTML+"</div>");r.close();n.contentWindow.focus();n.contentWindow.print();alert("Printing...");document.body.removeChild(n)}},About:{label:"?",func:function(e){var t=window.open("","_blank","dialog,width=330,height=150,scrollbars=0");var n=t.document;dp.sh.Utils.CopyStyles(n,window.document);n.write(dp.sh.Strings.AboutDialog.replace("{V}",dp.sh.Version));n.close();t.focus()}}};dp.sh.Toolbar.Create=function(e){var t=document.createElement("DIV");t.className="tools";for(var n in dp.sh.Toolbar.Commands){var r=dp.sh.Toolbar.Commands[n];if(r.check!=null&&!r.check(e))continue;t.innerHTML+='<a href="#" onclick="dp.sh.Toolbar.Command(\''+n+"',this);return false;\">"+r.label+"</a>"}return t};dp.sh.Toolbar.Command=function(e,t){var n=t;while(n!=null&&n.className.indexOf("dp-highlighter")==-1)n=n.parentNode;if(n!=null)dp.sh.Toolbar.Commands[e].func(t,n.highlighter)};dp.sh.Utils.CopyStyles=function(e,t){var n=t.getElementsByTagName("link");for(var r=0;r<n.length;r++)if(n[r].rel.toLowerCase()=="stylesheet")e.write('<link type="text/css" rel="stylesheet" href="'+n[r].href+'"></link>')};dp.sh.Utils.FixForBlogger=function(e){return dp.sh.isBloggerMode==true?e.replace(/<br\s*\/?>|&lt;br\s*\/?&gt;/gi,"\n"):e};dp.sh.Highlighter=function(){this.noGutter=false;this.addControls=true;this.collapse=false;this.tabsToSpaces=true;this.wrapColumn=80;this.showColumns=true};dp.sh.Highlighter.prototype.Highlight=function(e){if(e===null)e="";this.originalCode=e;this.div.highlighter=this};dp.sh.BloggerMode=function(){dp.sh.isBloggerMode=true};dp.sh.Initialize=function(e){function a(){var e=arguments;for(var t=0;t<e.length;t++){if(e[t]===null)continue;if(typeof e[t]=="string"&&e[t]!="")return e[t]+"";if(typeof e[t]=="object"&&e[t].value!="")return e[t].value+""}return null}function f(e,t){for(var n=0;n<t.length;n++)if(t[n]==e)return true;return false}function l(e,t,n){var r=document.getElementsByTagName(n);for(var i=0;i<r.length;i++)if(r[i].getAttribute("name")==t)e.push(r[i])}var t=e.presourcecode;var n=e.highlighterMainDivId;var r=e.showGutter;var i=e.showControls;var s=e.collapseAll;var o=e.firstLine;var u=e.showColumns;var c=[];var h=null;var p={};var d="innerHTML";l(c,t,"pre");if(c.length===0)return;for(var v=0;v<c.length;v++){var m=c[v];var g=a(m.attributes["class"],m.className,m.attributes["language"],m.language);g=g.split(":");h=new dp.sh.Highlighter;h.div=document.getElementById(n);if(typeof r==="undefined"){h.noGutter=f("nogutter",g)}else{h.noGutter=!r}if(typeof i==="undefined"){h.addControls=!f("nocontrols",g)}else{h.addControls=i}if(typeof s==="undefined"){h.collapse=f("collapse",g)}else{h.collapse=s}if(typeof u==="undefined"){h.showColumns=f("showcolumns",g)}else{h.showColumns=u}h.firstLine=o===null?parseInt(GetOptionValue("firstline",g,1)):o;h.Highlight(m[d]);h.source=m}}
+
+//
+// create namespaces
+//
+var dp = {
+	sh :
+	{
+		Toolbar : {},
+		Utils	: {},
+		RegexLib: {},
+		Brushes	: {},
+		Strings : {
+			AboutDialog : '<html><head><title>About...</title></head><body class="dp-about"><table cellspacing="0"><tr><td class="copy"><p class="title">dp.SyntaxHighlighter</div><div class="para">Version: {V}</p><p><a href="http://www.dreamprojections.com/syntaxhighlighter/?ref=about" target="_blank">http://www.dreamprojections.com/syntaxhighlighter</a></p>&copy;2004-2008 Alex Gorbatchev.</td></tr><tr><td class="footer">To Learn: <a href="http://codeworkout.blogspot.com/2014/07/format-the-source-code-syntax.html" target="_blank">How to Generate Code Syntax Highlight</a><input type="button" class="close" value="OK" onClick="window.close()"/></td></tr></table></body></html>'
+		},
+		ClipboardSwf : null,
+		Version : '1.5.2'
+	}
+};
+
+// make an alias
+dp.SyntaxHighlighter = dp.sh;
+
+//
+// Toolbar functions
+//
+
+dp.sh.Toolbar.Commands = {
+	ExpandSource: {
+		label: '+ expand source',
+		check: function(highlighter) { return highlighter.collapse; },
+		func: function(sender, highlighter)
+		{
+			sender.parentNode.removeChild(sender);
+			highlighter.div.className = highlighter.div.className.replace('collapsed', '');
+		}
+	},
+	
+	// opens a new windows and puts the original unformatted source code inside.
+	ViewSource: {
+		label: 'view plain',
+		func: function(sender, highlighter)
+		{
+			var code = dp.sh.Utils.FixForBlogger(highlighter.originalCode).replace(/</g, '&lt;');
+			var wnd = window.open('', '_blank', 'width=750, height=400, location=0, resizable=1, menubar=0, scrollbars=0');
+			wnd.document.write('<textarea style="width:99%;height:99%">' + code + '</textarea>');
+			wnd.document.close();
+		}
+	},
+	
+	// Copies the original source code in to the clipboard. Uses either IE only method or Flash object if ClipboardSwf is set
+	CopyToClipboard: {
+		label: 'copy to clipboard',
+		check: function() { return window.clipboardData != null || dp.sh.ClipboardSwf != null; },
+		func: function(sender, highlighter)
+		{
+			var code = dp.sh.Utils.FixForBlogger(highlighter.originalCode)
+				.replace(/&lt;/g,'<')
+				.replace(/&gt;/g,'>')
+				.replace(/&amp;/g,'&')
+			;
+			
+			if(window.clipboardData)
+			{
+				window.clipboardData.setData('text', code);
+			}
+			else if(dp.sh.ClipboardSwf != null)
+			{
+				var flashcopier = highlighter.flashCopier;
+				
+				if(flashcopier === null)
+				{
+					flashcopier = document.createElement('div');
+					highlighter.flashCopier = flashcopier;
+					highlighter.div.appendChild(flashcopier);
+				}
+				
+				flashcopier.innerHTML = '<embed src="' + dp.sh.ClipboardSwf + '" FlashVars="clipboard='+encodeURIComponent(code)+'" width="0" height="0" type="application/x-shockwave-flash"></embed>';
+			}
+			
+			alert('The code is in your clipboard now');
+		}
+	},
+	
+	// creates an invisible iframe, puts the original source code inside and prints it
+	PrintSource: {
+		label: 'print',
+		func: function(sender, highlighter)
+		{
+			var iframe = document.createElement('IFRAME');
+			var doc = null;
+
+			// this hides the iframe
+			iframe.style.cssText = 'position:absolute;width:0px;height:0px;left:-500px;top:-500px;';
+			
+			document.body.appendChild(iframe);
+			doc = iframe.contentWindow.document;
+
+			dp.sh.Utils.CopyStyles(doc, window.document);
+			doc.write('<div class="' + highlighter.div.className.replace('collapsed', '') + ' printing">' + highlighter.div.innerHTML + '</div>');
+			doc.close();
+
+			iframe.contentWindow.focus();
+			iframe.contentWindow.print();
+			
+			alert('Printing...');
+			
+			document.body.removeChild(iframe);
+		}
+	},
+	
+	About: {
+		label: '?',
+		func: function(highlighter)
+		{
+			var wnd	= window.open('', '_blank', 'dialog,width=330,height=150,scrollbars=0');
+			var doc	= wnd.document;
+
+			dp.sh.Utils.CopyStyles(doc, window.document);
+			
+			doc.write(dp.sh.Strings.AboutDialog.replace('{V}', dp.sh.Version));
+			doc.close();
+			wnd.focus();
+		}
+	}
+};
+
+// creates a <div /> with all toolbar links
+dp.sh.Toolbar.Create = function(highlighter)
+{
+	var div = document.createElement('DIV');
+	
+	div.className = 'tools';
+	
+	for(var name in dp.sh.Toolbar.Commands)
+	{
+		var cmd = dp.sh.Toolbar.Commands[name];
+		
+		if(cmd.check != null && !cmd.check(highlighter))
+			continue;
+		
+		div.innerHTML += '<a href="#" onclick="dp.sh.Toolbar.Command(\'' + name + '\',this);return false;">' + cmd.label + '</a>';
+	}
+	
+	return div;
+}
+
+// executes toolbar command by name
+dp.sh.Toolbar.Command = function(name, sender)
+{
+	var n = sender;
+	
+	while(n != null && n.className.indexOf('dp-highlighter') == -1)
+		n = n.parentNode;
+	
+	if(n != null)
+		dp.sh.Toolbar.Commands[name].func(sender, n.highlighter);
+}
+
+// copies all <link rel="stylesheet" /> from 'target' window to 'dest'
+dp.sh.Utils.CopyStyles = function(destDoc, sourceDoc)
+{
+	var links = sourceDoc.getElementsByTagName('link');
+
+	for(var i = 0; i < links.length; i++)
+		if(links[i].rel.toLowerCase() == 'stylesheet')
+			destDoc.write('<link type="text/css" rel="stylesheet" href="' + links[i].href + '"></link>');
+}
+
+dp.sh.Utils.FixForBlogger = function(str)
+{
+	return (dp.sh.isBloggerMode == true) ? str.replace(/<br\s*\/?>|&lt;br\s*\/?&gt;/gi, '\n') : str;
+}
+
+
+//
+// Highlighter object
+//
+dp.sh.Highlighter = function()
+{
+	this.noGutter = false;
+	this.addControls = true;
+	this.collapse = false;
+	this.tabsToSpaces = true;
+	this.wrapColumn = 80;
+	this.showColumns = true;
+}
+
+
+
+
+dp.sh.Highlighter.prototype.Highlight = function(code)
+{
+	if(code === null)
+		code = '';
+	
+	this.originalCode = code;
+	this.div.highlighter = this;
+}
+
+
+dp.sh.BloggerMode = function()
+{
+	dp.sh.isBloggerMode = true;
+}
+
+dp.sh.Initialize  = function(objArgs)
+{
+	var name 					= objArgs.presourcecode;	
+	var highlighterMainDivId	= objArgs.highlighterMainDivId;
+	var showGutter 				= objArgs.showGutter;			/* optional */
+	var showControls 			= objArgs.showControls;			/* optional */
+	var collapseAll				= objArgs.collapseAll;			/* optional */
+	var firstLine				= objArgs.firstLine;			/* optional */
+	var showColumns				= objArgs.showColumns;			/* optional */
+	
+	function FindValue()
+	{
+		var a = arguments;
+		
+		for(var i = 0; i < a.length; i++)
+		{
+			if(a[i] === null)
+				continue;
+				
+			if(typeof(a[i]) == 'string' && a[i] != '')
+				return a[i] + '';
+		
+			if(typeof(a[i]) == 'object' && a[i].value != '')
+				return a[i].value + '';
+		}
+		return null;
+	}
+	
+	function IsOptionSet(value, list)
+	{
+		for(var i = 0; i < list.length; i++)
+			if(list[i] == value)
+				return true;
+		
+		return false;
+	}
+		
+	function FindTagsByName(list, name, tagName)
+	{
+		var tags = document.getElementsByTagName(tagName);
+
+		for(var i = 0; i < tags.length; i++)
+			if(tags[i].getAttribute('name') == name)
+				list.push(tags[i]);
+	}
+
+	var elements = [];
+	var highlighter = null;
+	var registered = {};
+	var propertyName = 'innerHTML';
+
+	// for some reason IE doesn't find <pre/> by name, however it does see them just fine by tag name...
+	FindTagsByName(elements, name, 'pre');
+
+	if(elements.length === 0)
+		return;
+
+
+
+	for(var i = 0; i < elements.length; i++)
+	{
+		var element = elements[i];
+		
+		var options = FindValue(
+				element.attributes['class'], element.className, 
+				element.attributes['language'], element.language
+				);
+	
+		options = options.split(':');
+	
+		// instantiate a brush
+		highlighter = new dp.sh.Highlighter();
+	
+		highlighter.div = document.getElementById(highlighterMainDivId);
+
+        if (typeof(showGutter) === 'undefined') {
+            highlighter.noGutter = IsOptionSet('nogutter', options);
+        } else {
+            highlighter.noGutter = !showGutter;
+        }
+
+        if (typeof(showControls) === 'undefined') {
+            highlighter.addControls = !IsOptionSet('nocontrols', options);
+        } else {
+            highlighter.addControls = showControls;
+        }
+
+        if (typeof(collapseAll) === 'undefined') {
+            highlighter.collapse = IsOptionSet('collapse', options);
+        } else {
+            highlighter.collapse = collapseAll;
+        }
+
+        if (typeof(showColumns) === 'undefined') {
+            highlighter.showColumns = IsOptionSet('showcolumns', options);
+        } else {
+            highlighter.showColumns = showColumns;
+        }
+
+		
+		// first line idea comes from Andrew Collington, thanks!
+		highlighter.firstLine = (firstLine === null) ? parseInt(GetOptionValue('firstline', options, 1)) : firstLine;
+				
+
+		highlighter.Highlight(element[propertyName]);
+		
+		highlighter.source = element;
+
+	}
+}
