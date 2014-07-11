@@ -8,12 +8,35 @@
 -->
 <html>
 <head>
-	<link   type="text/css" href="stylesheets/css/stylehighlighter01.css" />	
-	<script type='text/javascript' src='javascripts/js/sh-min.js' />
+	<link   type="text/css" href="stylesheets/css/stylehighlighter01.css"  rel="stylesheet"/>	
+	<script type='text/javascript' src='javascripts/js/sh-min.js'></script>
 </head>
 <body>
 <!-- Insert The Generated HTML Below This -->
+<style type="text/css">.dp-j .annotation { color: #646464; }.dp-j .number { color: #C00000; }</style>
 
+<div class="dp-highlighter" id="highlighterMainDiv"><div class="bar"><div class="tools"><a href="#" onclick="dp.sh.Toolbar.Command('ViewSource',this);return false;">view plain</a><a href="#" onclick="dp.sh.Toolbar.Command('PrintSource',this);return false;">print</a><a href="#" onclick="dp.sh.Toolbar.Command('About',this);return false;">?</a></div></div><ol class="dp-j" start="0"><li class="alt"><span><span class="keyword">package</span><span> com.test4;  </span></span></li><li class=""><span>  </span></li><li class="alt"><span><span class="keyword">import</span><span> org.springframework.context.ApplicationListener;  </span></span></li><li class=""><span>  </span></li><li class="alt"><span><span class="keyword">public</span><span> </span><span class="keyword">class</span><span> OfferEventListener </span><span class="keyword">implements</span><span> ApplicationListener<OfferEvent> {  </span></span></li><li class=""><span>  </span></li><li class="alt"><span>    <span class="comment">//implemented method</span><span>  </span></span></li><li class=""><span>    <span class="keyword">public</span><span> </span><span class="keyword">void</span><span> onApplicationEvent(OfferEvent event) {  </span></span></li><li class="alt"><span>        System.out.println(<span class="string">"OfferEvent received ="</span><span> + event.getClass()  </span></span></li><li class=""><span>                + <span class="string">"\n At ="</span><span> + event.getTimestamp()  </span></span></li><li class="alt"><span>                + <span class="string">"\n Source ="</span><span> + event.getSource().getClass()    </span></span></li><li class=""><span>                + <span class="string">"\n Msg ="</span><span> + event.toString() );  </span></span></li><li class="alt"><span>    }  </span></li><li class=""><span>      </span></li><li class="alt"><span>  </span></li><li class=""><span>}  </span></li></ol></div>
+
+<pre class="displaysourcecode" name="presourcecode">
+
+package com.test4;
+
+import org.springframework.context.ApplicationListener;
+
+public class OfferEventListener implements ApplicationListener {
+
+	//implemented method
+	public void onApplicationEvent(OfferEvent event) {
+		System.out.println("OfferEvent received =" + event.getClass()
+				+ "\n At =" + event.getTimestamp()
+				+ "\n Source =" + event.getSource().getClass()	
+				+ "\n Msg =" + event.toString() );
+	}
+	
+
+}
+
+</pre>
 <!-- Insert The Generated HTML Above This -->
 <script language='javascript'>
 	var highAllObj = { 
