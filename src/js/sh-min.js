@@ -138,7 +138,7 @@ dp.sh.Toolbar.Commands = {
 		label: '?',
 		func: function(highlighter)
 		{
-			var wnd	= window.open('', '_blank', 'dialog,width=330,height=150,scrollbars=0');
+			var wnd	= window.open('', '_blank', 'dialog,width=330,height=160,scrollbars=0');
 			var doc	= wnd.document;
 
 			dp.sh.Utils.CopyStyles(doc, window.document);

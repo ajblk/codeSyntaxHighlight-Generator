@@ -138,7 +138,7 @@ dp.sh.Toolbar.Commands = {
 		label: '?',
 		func: function(highlighter)
 		{
-			var wnd	= window.open('', '_blank', 'dialog,width=330,height=150,scrollbars=0');
+			var wnd	= window.open('', '_blank', 'dialog,width=330,height=160,scrollbars=0');
 			var doc	= wnd.document;
 
 			dp.sh.Utils.CopyStyles(doc, window.document);
@@ -497,22 +497,23 @@ dp.sh.Highlighter.prototype.Highlight = function(code)
 	
 	function safe_tags(str) {
 		return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') ;  //.replace(/ /g, '&nbsp;')
-	}	
-
+	}
+	
+	function safe_tagsDeep(str) {
+		return str.replace(/&/g,'&amp;');
+	}
+	
 	var pos	= 0;
 	
 	if(code === null)
 		code = '';
-	
+
 	this.originalCode = code;
 	this.code = Chop(Unindent(code));
 	this.bar = this.CreateElement('DIV');
 	this.ol = this.CreateElement('OL');
-	this.precode = document.createElement('pre');	
-	
-	this.precode.innerHTML = this.originalCode;
-	
-
+	this.precode = document.createElement('pre');		
+	this.precode.innerHTML = safe_tagsDeep(safe_tags(this.originalCode));
 	
 	this.matches = new Array();
 	
@@ -577,13 +578,13 @@ dp.sh.Highlighter.prototype.Highlight = function(code)
 	
 	this.AddBit(this.code.substr(pos), null);
 
-	this.SwitchToList();
+	this.SwitchToList();		
 	this.div.appendChild(this.bar);
 	this.div.appendChild(this.ol);
 	
+	var styleNode = document.createElement('style');
 	if(this.Style)
-	{
-		var styleNode = document.createElement('style');
+	{		
 		styleNode.setAttribute('type', 'text/css');
 
 		if(styleNode.styleSheet) // for IE
@@ -596,9 +597,10 @@ dp.sh.Highlighter.prototype.Highlight = function(code)
 			styleNode.appendChild(textNode);
 		}
 	}	
-		  
-	this.outputdiv.innerHTML = safe_tags(styleNode.outerHTML+'') + '<br/><br/>' + safe_tags(this.div.outerHTML+'') + '<br/><br/>' + '&lt;pre class="displaysourcecode"  name="presourcecode"&gt;' + this.precode.outerHTML + '&lt;/pre&gt;'  + '' ;
 	
+	this.outputdiv.innerHTML = safe_tags(styleNode.outerHTML+'') + '<br/><br/>' + safe_tags((this.div.outerHTML+'')) + '<br/><br/>' + '&lt;pre class="displaysourcecode"  name="presourcecode"&gt;' + this.precode.outerHTML + '&lt;/pre&gt;'  + '' ;
+	
+	this.div.appendChild(styleNode);
 }
 
 dp.sh.Highlighter.prototype.GetKeywords = function(str) 
