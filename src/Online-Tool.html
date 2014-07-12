@@ -1,21 +1,21 @@
 ﻿<html>
 <head>
-	<script src='js/shGenerator.js' type='text/javascript'></script>
-	<script src='js/shBrushJava.js' type='text/javascript'></script>
+	<script src='javascripts/js/shGenerator.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushJava.js' type='text/javascript'></script>
 	
-	<script src='js/shBrushCpp.js' type='text/javascript'></script>
-	<script src='js/shBrushCSharp.js' type='text/javascript'></script>
-	<script src='js/shBrushCss.js' type='text/javascript'></script>
-	<script src='js/shBrushDelphi.js' type='text/javascript'></script>
-	<script src='js/shBrushJScript.js' type='text/javascript'></script>
-	<script src='js/shBrushPhp.js' type='text/javascript'></script>
-	<script src='js/shBrushPython.js' type='text/javascript'></script>
-	<script src='js/shBrushRuby.js' type='text/javascript'></script>
-	<script src='js/shBrushSql.js' type='text/javascript'></script>
-	<script src='js/shBrushVb.js' type='text/javascript'></script>
-	<script src='js/shBrushXml.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushCpp.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushCSharp.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushCss.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushDelphi.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushJScript.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushPhp.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushPython.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushRuby.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushSql.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushVb.js' type='text/javascript'></script>
+	<script src='javascripts/js/shBrushXml.js' type='text/javascript'></script>
 	
-	<link rel="stylesheet" type="text/css" href="css/stylehighlighter01.css" />
+	<link rel="stylesheet" type="text/css" href="stylesheets/css/stylehighlighter01.css" />
 	<style>
 		.outputcss
 		{
@@ -64,7 +64,7 @@
 		getFormattedhtml = function()
 		{
 			var shcboxes = document.getElementsByName('sh-options[]');			
-			var highAllObj = {	
+			var args = {	
 								codeInputTextarea 	: "highlightcode",
 								previewDivId		: "PreviewSect",
 								htmlOutputDivId		: "outputhtml",
@@ -75,7 +75,7 @@
 			// Check Options
 			for (var i=0; i < shcboxes.length; i++) 
 			{
-				highAllObj[shcboxes[i].value] = shcboxes[i].checked;	
+				args[shcboxes[i].value] = shcboxes[i].checked;	
 			}
 
 			// Set Language class
@@ -83,7 +83,7 @@
 			shHighlightcodeDiv.className = document.getElementsByName('sh-lang')[0].value;
 			
 			//Call Main Function
-			dp.SyntaxHighlighter.HighlightAll(highAllObj);
+			dp.SyntaxHighlighter.HighlightAll(args);
 			
 			return true;
 		}
@@ -125,7 +125,24 @@
 			<textarea name="highlightcode" id="highlightcode" style="width: 675px; height: 390px; float:left;"></textarea>
 			<div class="configureoptionsStyle">
 				<p><b>2. Configure Options</b></p>
-				Language : <input type="text" name="sh-lang" value="java" class="shlangtext" /><br>
+				Language : <!-- <input type="text" name="sh-lang" value="java" class="shlangtext" /> -->
+				
+				<select name="sh-lang" class="shlangtext">
+					<option value="Java"> Java </option>
+					<option value="Php"> PHP </option>
+					<option value="JScript"> Javascript </option>					
+					<option value="Html"> HTML </option>
+					<option value="CSS"> CSS </option>
+					<option value="Xml"> XML </option>					
+					<option value="Sql"> SQL </option>
+					<option value="CSharp"> C# </option>					
+					<option value="Cpp"> C++ </option>
+					<option value="Vb"> Vb </option>
+					<option value="Python"> Python </option>
+					<option value="Ruby"> Ruby </option>
+					<option value="Delphi"> Delphi </option>
+				</select>	
+				<br>
 				<input type="checkbox" name="sh-options[]" value="showGutter" checked>Show Gutter<br>
 				<input type="checkbox" name="sh-options[]" value="showControls" checked onclick="disableChkbox(this,2);">Show Controls<br>
 				<input type="checkbox" name="sh-options[]" value="collapseAll">Collapse All<br>
